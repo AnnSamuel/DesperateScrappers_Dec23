@@ -4,6 +4,10 @@
   <test thread-count="5" name="Test">
     <classes>
       <class name="tarlaDalal.LaunchUrl"/>
+      <class name="tarlaDalal.Diabetes" />
+      <class name="tarlaDalal.Hypertension"/>
+      <class name="tarlaDalal.Hypothyroidism"/>
+      <class name="tarlaDalal.PCOS"/>
       <class name="utilities.Hooks"/>
       <class name="utilities.BaseClass"/>
       <class name="utilities.ConfigReader"/>

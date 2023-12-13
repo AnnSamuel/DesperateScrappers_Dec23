@@ -3,6 +3,8 @@ package utilities;
 import org.testng.annotations.AfterMethod;
 import java.time.Duration;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,7 +15,7 @@ public class BaseClass {
 	static String url = "https://www.tarladalal.com/";
 
 	public static void setUpDriver() {
-		
+
 //		System.out.println("this is hte browser --->>> " +browser);
 //
 //		if (browser.equalsIgnoreCase("chrome")) {
@@ -26,6 +28,7 @@ public class BaseClass {
 //			// LoggerLoad.info("testing on edge");
 //		}
 		driver = new ChromeDriver();// initialize chrome driver
+
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));// implicit wait
 		driver.manage().window().maximize();// maximize the window
 	}
@@ -44,6 +47,12 @@ public class BaseClass {
 
 	public static WebDriver getDriver() {
 		return driver;
+	}
+
+	public static Document getJsoupDocument() {
+		String htmlSource = driver.getPageSource();
+		Document document = Jsoup.parse(htmlSource);
+		return document;
 	}
 
 	public static void refresh() {
