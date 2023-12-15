@@ -1,13 +1,16 @@
 package utilities;
+
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Parameters;
 
 public class Hooks {
 
 	@BeforeSuite
-	public static void setUp() throws Throwable {
+	 @Parameters("headlessMode")
+	public static void setUp(String headlessMode) throws Throwable {
 		// BaseClass.setUpDriver(ConfigReader.getBrowserType());
-		BaseClass.setUpDriver();
+		BaseClass.setUpDriver(headlessMode);
 		// ExcelUtils.init();
 	}
 

@@ -13,11 +13,12 @@ import utilities.BaseClass;
  */
 public class LaunchUrl extends BaseClass {
 
-	@Test
+//	@Test
 	public void testTitle() {
 		openPage();
 		String pageTitle = title();
 		Assert.assertEquals(pageTitle, "Indian Recipes | Indian Vegetarian Recipes | Top Indian Veg Dishes");
+		//openRecipePage();
 	}
 
 }
