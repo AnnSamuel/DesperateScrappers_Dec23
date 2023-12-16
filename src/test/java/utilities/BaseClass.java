@@ -14,7 +14,7 @@ public class BaseClass {
 	static String url = "https://www.tarladalal.com/";
 
 	public static void setUpDriver(String headlessMode) {
-		System.out.println("check headless value" + headlessMode);
+		System.out.println("check headless value: " + headlessMode);
 
 		// Enable headless mode based on the parameter value
 		ChromeOptions options = new ChromeOptions();
