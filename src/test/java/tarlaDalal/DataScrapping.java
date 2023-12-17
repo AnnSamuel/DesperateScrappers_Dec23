@@ -16,28 +16,30 @@ import utilities.BaseClass;
 import utilities.CommonUtils;
 import utilities.ExcelWriter;
 
-public class Diabetes extends BaseClass {
+public class DataScrapping extends BaseClass {
 	List<RecipePojo> recipeList = new ArrayList<RecipePojo>();
 
-	//@Test
+	@Test
 	public void diabetesScrape() {
 
-		scrapeAcrossPages("/recipes-for-indian-diabetic-recipes-370?pageindex=24","Diabetes Elimination", "DiabeteSheet");
+		scrapeAcrossPages("/recipes-for-indian-diabetic-recipes-370","Diabetes Elimination", "DiabeteSheet");
 
 	}
-
+	
 	@Test
 	public void hypertensionScrape() {
 		
-		scrapeAcrossPages("/recipes-for-high-blood-pressure-644?pageindex=5","Hypertension Elimination", "HypertensionSheet");
+		scrapeAcrossPages("/recipes-for-high-blood-pressure-644","Hypertension Elimination", "HypertensionSheet");
 	}
 
+	@Test
 	public void thyroidScrape() {
 		
 		scrapeAcrossPages("/recipes-for-hypothyroidism-veg-diet-indian-recipes-849","Hypothyroidism Elimination", "HyperthyroidismSheet");
 
 	}
 
+	@Test
 	public void pcos() {
 		
 		scrapeAcrossPages("/recipes-for-pcos-1040","PCOS Elimination", "pcosSheet");
@@ -68,7 +70,7 @@ public class Diabetes extends BaseClass {
 		List<RecipePojo> filteredList = CommonUtils.getFilteredList(recipeList, CommonUtils.getEliminationAddList(
 				"src/test/resources/excelReader/Elimination&AddList.xlsx", eliminationSheetName, 0));
 
-		ExcelWriter.writeDataToExcelExistCheck(filteredList, "target/recipies.xlsx", createSheetName);	
+		ExcelWriter.writeDataToExcel(filteredList, "target/recipies.xlsx", createSheetName);	
 	}
 
 	public void scrapeAPage(Document document) {
@@ -158,3 +160,4 @@ public class Diabetes extends BaseClass {
 	}
 
 }
+
