@@ -11,7 +11,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class BaseClass {
 	public static WebDriver driver;
-	static String url = "https://www.tarladalal.com/";
+	static String url = "https://www.tarladalal.com";
 
 	public static void setUpDriver(String headlessMode) {
 		System.out.println("check headless value: " + headlessMode);
