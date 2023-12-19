@@ -21,45 +21,46 @@ public class DataScrapping extends BaseClass {
 
 	@Test
 	public void diabetesScrape() {
-
-		scrapeAcrossPages("/recipes-for-indian-diabetic-recipes-370","Diabetes Elimination", "DiabeteSheet");
-
+		recipeList.clear();
+		scrapeAcrossPages("DIABETES");
 	}
-	
+
 	@Test
 	public void hypertensionScrape() {
-		
-		scrapeAcrossPages("/recipes-for-high-blood-pressure-644","Hypertension Elimination", "HypertensionSheet");
+		recipeList.clear();
+		scrapeAcrossPages("HYPERTENSION");
 	}
 
 	@Test
 	public void thyroidScrape() {
-		
-		scrapeAcrossPages("/recipes-for-hypothyroidism-veg-diet-indian-recipes-849","Hypothyroidism Elimination", "HyperthyroidismSheet");
+		recipeList.clear();
+		scrapeAcrossPages("HYPOTHYROIDISM");
 
 	}
 
 	@Test
 	public void pcos() {
-		
-		scrapeAcrossPages("/recipes-for-pcos-1040","PCOS Elimination", "pcosSheet");
+		recipeList.clear();
+		scrapeAcrossPages("PCOS");
 
 	}
 
 	// public method to do pagination and stuff
-	// change signature
-	public void scrapeAcrossPages(String siteUrl, String eliminationSheetName,String createSheetName) {
-		openSpecificPage(siteUrl);
+
+	public void scrapeAcrossPages(String type) {
+		openSpecificPage(CommonUtils.getURL(type));
 		boolean hasNextPageAvailable = true;
 		do {
 			Document document = getJsoupDocument();
+
+			scrapeAPage(document, type);
 			Elements nextPage = document.select("#pagination a.rescurrpg").next();
-			scrapeAPage(document);
 			hasNextPageAvailable = nextPage.size() > 0;
 			if (hasNextPageAvailable) {
 				System.out.println("Opening new page --->>> " + nextPage.get(0).attr("href"));
 				openSpecificPage(nextPage.get(0).attr("href"));
 			}
+
 //			hasNextPage = document.select("id=)
 		} while (hasNextPageAvailable);
 
@@ -67,13 +68,14 @@ public class DataScrapping extends BaseClass {
 		// remove after list is extracted from
 		// excel
 
-		List<RecipePojo> filteredList = CommonUtils.getFilteredList(recipeList, CommonUtils.getEliminationAddList(
-				"src/test/resources/excelReader/Elimination&AddList.xlsx", eliminationSheetName, 0));
+		List<RecipePojo> filteredList = CommonUtils.getFilteredList(recipeList,
+				CommonUtils.getEliminationList("src/test/resources/excelReader/EliminationList.xlsx",
+						CommonUtils.getEliminationSheetName(type), 0));
 
-		ExcelWriter.writeDataToExcel(filteredList, "target/recipies.xlsx", createSheetName);	
+		ExcelWriter.writeDataToExcel(filteredList, "target/recipies.xlsx", CommonUtils.getSheetName(type));
 	}
 
-	public void scrapeAPage(Document document) {
+	public void scrapeAPage(Document document, String type) {
 
 		List<Element> recipeCards = document.select("article.rcc_recipecard");
 
@@ -83,8 +85,11 @@ public class DataScrapping extends BaseClass {
 				Elements recipeIdEleList = recipeCard.select(".rcc_rcpno");
 				Assert.assertTrue(recipeIdEleList.size() > 0, "recipeID should be available"); // chk if recipeid
 																								// available
-																								// to retreive recipe ID
+//				12345678910111213																				// to retreive recipe ID
+//				RECEPIE# 1 2 3 4 #
 				String recipeId = recipeIdEleList.get(0).firstElementChild().text();
+				int firstOccurance = recipeId.indexOf(" ") + 1;
+				recipeId = recipeId.substring(firstOccurance, recipeId.indexOf(" ", firstOccurance));
 //			System.out.println(recipeId);
 				Elements recipeNameEleList = recipeCard.select(".rcc_rcpcore > span > a");
 				Assert.assertTrue(recipeNameEleList.size() > 0, "recipeName should be available");
@@ -124,7 +129,7 @@ public class DataScrapping extends BaseClass {
 				recipe.setIngredients(ingredientList);
 
 				recipe.setPreparationMethod(prepMethod);
-				recipe.setMorbidConditions("diabetes");
+				recipe.setMorbidConditions(CommonUtils.getMorbidConditions(type));
 
 				Elements nutrientRowListEle = recipeDocument.select("table[id=rcpnutrients] tr");
 				List<String> nutrientList = new ArrayList<String>();
@@ -160,4 +165,3 @@ public class DataScrapping extends BaseClass {
 	}
 
 }
-
