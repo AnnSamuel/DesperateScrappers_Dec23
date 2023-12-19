@@ -1,8 +1,5 @@
 package utilities;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,17 +7,27 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 public class ExcelWriter {
 
-
-public static <T> void writeDataToExcel(List<T> dataList, String filePath, String sheetName) {
+	public static <T> void writeDataToExcel(List<T> dataList, String filePath, String sheetName) {
 
 		try {
 			File file = new File(filePath);
-            file.createNewFile(); // Creates the file if it doesn't exist
+			file.createNewFile(); // Creates the file if it doesn't exist
 
 			FileInputStream fileIn = new FileInputStream(file);
-			Workbook workbook = (fileIn.available() > 0) ? WorkbookFactory.create(fileIn) : new XSSFWorkbook();  //
+			Workbook workbook = (fileIn.available() > 0) ? WorkbookFactory.create(fileIn) : new XSSFWorkbook();
+			int sheetIndex = workbook.getSheetIndex(sheetName);
+			if (sheetIndex >= 0) {
+				workbook.removeSheetAt(workbook.getSheetIndex(sheetName));
+			}
 			Sheet sheet = workbook.createSheet(sheetName);
 
 			// Write headers (field names) in the first row
@@ -73,10 +80,11 @@ public static <T> void writeDataToExcel(List<T> dataList, String filePath, Strin
 					e.printStackTrace();
 				}
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
-
 
 	}
 
